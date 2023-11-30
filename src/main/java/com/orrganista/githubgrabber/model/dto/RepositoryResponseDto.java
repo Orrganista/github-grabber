@@ -1,12 +1,12 @@
-package com.orrganista.githubgrabber.dto;
+package com.orrganista.githubgrabber.model.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@RequiredArgsConstructor
-@Getter
+@Data
+@Builder
 public class RepositoryResponseDto {
     private final String fullName;
     private final String description;

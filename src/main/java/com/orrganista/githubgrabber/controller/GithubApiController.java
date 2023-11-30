@@ -1,7 +1,6 @@
 package com.orrganista.githubgrabber.controller;
 
-import com.orrganista.githubgrabber.dto.RepositoryResponseDto;
-import com.orrganista.githubgrabber.remote.githubapi.model.Repository;
+import com.orrganista.githubgrabber.model.dto.RepositoryResponseDto;
 import com.orrganista.githubgrabber.service.GithubApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +18,12 @@ public class GithubApiController {
     private final GithubApiService githubApiService;
 
     @GetMapping("/{owner}")
-    public List<Repository> getUserRepositories(@PathVariable String owner) {
+    public List<RepositoryResponseDto> getUserRepositories(@PathVariable String owner) {
         return githubApiService.GetUserRepositories(owner);
     }
 
     @GetMapping("/{owner}/{repo}")
-    public Repository getUserRepositoryByName(@PathVariable String owner, @PathVariable String repo) {
+    public RepositoryResponseDto getUserRepositoryByName(@PathVariable String owner, @PathVariable String repo) {
         return githubApiService.GetRepositoryByName(owner, repo);
     }
 }
