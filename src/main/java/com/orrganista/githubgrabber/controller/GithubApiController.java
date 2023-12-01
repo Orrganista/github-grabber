@@ -19,11 +19,11 @@ public class GithubApiController {
 
     @GetMapping("/{owner}")
     public List<RepositoryResponseDto> getUserRepositories(@PathVariable String owner) {
-        return githubApiService.getUserRepositories(owner);
+        return githubApiService.GetUserRepositories(owner);
     }
 
     @GetMapping("/{owner}/{repo}")
     public RepositoryResponseDto getUserRepositoryByName(@PathVariable String owner, @PathVariable String repo) {
-        return githubApiService.getRepositoryByName(owner, repo);
+        return githubApiService.GetRepositoryByName(owner, repo);
     }
 }
