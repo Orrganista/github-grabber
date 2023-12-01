@@ -15,7 +15,7 @@ public interface GithubApiClient {
 
     @GetMapping("/users/{owner}/repos")
     @Headers("Accept: application/vnd.github+json")
-    Optional<List<Repository>> getUserRepositories(@PathVariable("owner") String owner);
+    List<Repository> getUserRepositories(@PathVariable("owner") String owner);
 
     @GetMapping("/repos/{owner}/{repo}")
     @Headers("Accept: application/vnd.github+json")
