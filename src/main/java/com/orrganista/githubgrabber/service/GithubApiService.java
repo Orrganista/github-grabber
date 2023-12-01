@@ -18,17 +18,14 @@ public class GithubApiService {
     private final GithubApiMapper githubApiMapper;
 
 
-    public List<RepositoryResponseDto> GetUserRepositories(String owner) {
-        List<Repository> repositoryList = githubApiClient.getUserRepositories(owner)
-                .orElseThrow(() -> new DataNotFoundException("No repositories found."));
-
+    public List<RepositoryResponseDto> getUserRepositories(String owner) {
+        List<Repository> repositoryList = githubApiClient.getUserRepositories(owner);
         return githubApiMapper.toRepositoryResponseDtoList(repositoryList);
     }
 
-    public RepositoryResponseDto GetRepositoryByName(String owner, String repo) {
+    public RepositoryResponseDto getUserRepositoryByName(String owner, String repo) {
         Repository repository = githubApiClient.getUserRepositoryByName(owner, repo)
-                .orElseThrow(() -> new DataNotFoundException(String.format("Repository not found with name: {%s}.", repo)));
-
+                .orElseThrow(() -> new DataNotFoundException(String.format("Repository not found with name: %s.", repo)));
         return githubApiMapper.toRepositoryResponseDto(repository);
     }
 }

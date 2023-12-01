@@ -52,14 +52,14 @@ public class GithubApiClientTest {
     @Test
     public void shouldReturnUserRepositoryByName() throws Exception {
         var repository = GithubApiUtil.getTestRepository();
-        wireMockServer.stubFor(get(urlEqualTo("/repos/owner/" + repository.getFullName()))
+        wireMockServer.stubFor(get(urlEqualTo("/repos/owner/repo"))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(objectMapper.writeValueAsString(repository))));
 
-        var responseRepository = githubApiClient.getUserRepositoryByName("owner", repository.getFullName()).get();
+        var responseRepository = githubApiClient.getUserRepositoryByName("owner", "repo").get();
 
-        verify(getRequestedFor(urlEqualTo("/repos/owner/" + repository.getFullName())));
+        verify(getRequestedFor(urlEqualTo("/repos/owner/repo")));
         assertEquals(repository.getFullName(), responseRepository.getFullName());
         assertEquals(repository.getDescription(), responseRepository.getDescription());
         assertEquals(repository.getCloneUrl(), responseRepository.getCloneUrl());
