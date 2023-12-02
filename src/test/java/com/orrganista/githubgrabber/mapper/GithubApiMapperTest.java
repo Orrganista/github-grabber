@@ -12,7 +12,7 @@ public class GithubApiMapperTest {
     private final GithubApiMapper githubApiMapper = Mappers.getMapper(GithubApiMapper.class);
 
     @Test
-    public void givenRepositoryToRepositoryResponseDto_whenMaps_thenCorrect() {
+    public void toRepositoryResponseDto_DataCorrect_DtoReturned() {
         var repository = GithubApiUtil.getTestRepository();
 
         var dto = githubApiMapper.toRepositoryResponseDto(repository);
@@ -26,7 +26,7 @@ public class GithubApiMapperTest {
     }
 
     @Test
-    public void givenRepositoryListToRepositoryResponseDtoList_whenMaps_thenCorrect() {
+    public void toRepositoryResponseDtoList_DataCorrect_DtoListReturned() {
         var repositoryList = GithubApiUtil.getTestRepositoryList();
 
         var dtoList = githubApiMapper.toRepositoryResponseDtoList(repositoryList);
