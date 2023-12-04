@@ -2,11 +2,13 @@ package com.orrganista.githubgrabber.remote.githubapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
-import util.GithubApiUtil;
+import util.TestDataFactory;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
@@ -14,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureWireMock(port = 8888)
-public class GithubApiClientTest {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class GithubApiClientTest {
 
     @Autowired
     WireMockServer wireMockServer;
@@ -27,7 +30,7 @@ public class GithubApiClientTest {
 
     @Test
     public void shouldReturnUserRepositories() throws Exception {
-        var repositoryList = GithubApiUtil.getTestRepositoryList();
+        var repositoryList = TestDataFactory.getTestRepositoryList();
         wireMockServer.stubFor(get(urlEqualTo("/users/owner/repos"))
                 .willReturn(aResponse()
                         .withStatus(200)
@@ -51,7 +54,7 @@ public class GithubApiClientTest {
 
     @Test
     public void shouldReturnUserRepositoryByName() throws Exception {
-        var repository = GithubApiUtil.getTestRepository();
+        var repository = TestDataFactory.getTestRepository();
         wireMockServer.stubFor(get(urlEqualTo("/repos/owner/repo"))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader("Content-Type", "application/json")

@@ -1,17 +1,10 @@
 package com.orrganista.githubgrabber.controller;
 
 
-import com.jayway.jsonpath.JsonPath;
 import com.orrganista.githubgrabber.mapper.GithubApiMapper;
 import com.orrganista.githubgrabber.remote.githubapi.GithubApiClient;
-import com.orrganista.githubgrabber.service.GithubApiService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,9 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import util.GithubApiUtil;
+import util.TestDataFactory;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
@@ -49,7 +41,7 @@ public class GithubApiControllerTest {
 
     @Test
     void shouldReturnUserRepositories() throws Exception {
-        var repositories = GithubApiUtil.getTestRepositoryList();
+        var repositories = TestDataFactory.getTestRepositoryList();
         when(githubApiClient.getUserRepositories("owner")).thenReturn(repositories);
         var dtoRepositories = githubApiMapper.toRepositoryResponseDtoList(repositories);
 
@@ -71,7 +63,7 @@ public class GithubApiControllerTest {
 
     @Test
     void shouldReturnUserRepositoryByName() throws Exception {
-        var repository = GithubApiUtil.getTestRepository();
+        var repository = TestDataFactory.getTestRepository();
         when(githubApiClient.getUserRepositoryByName("owner", "repo")).thenReturn(Optional.of(repository));
         var dtoRepository = githubApiMapper.toRepositoryResponseDto(repository);
 

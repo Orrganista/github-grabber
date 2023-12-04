@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import util.GithubApiUtil;
+import util.TestDataFactory;
 
 import java.util.Optional;
 
@@ -37,7 +37,7 @@ public class GithubApiServiceTest {
     @Test
     void getUserRepositories_RepositoriesExist_RepositoriesReturned() {
         // given
-        var repositoryList = GithubApiUtil.getTestRepositoryList();
+        var repositoryList = TestDataFactory.getTestRepositoryList();
         var repositoryResponseDtoList = githubApiMapper.toRepositoryResponseDtoList(repositoryList);
         when(githubApiClient.getUserRepositories("owner")).thenReturn(repositoryList);
 
@@ -56,7 +56,7 @@ public class GithubApiServiceTest {
 
     @Test
     void getUserRepositoryByName_RepositoryExist_RepositoryReturned() {
-        var repository = GithubApiUtil.getTestRepository();
+        var repository = TestDataFactory.getTestRepository();
         var repositoryResponseDto = githubApiMapper.toRepositoryResponseDto(repository);
         when(githubApiClient.getUserRepositoryByName("owner", repository.getFullName())).thenReturn(Optional.of(repository));
 

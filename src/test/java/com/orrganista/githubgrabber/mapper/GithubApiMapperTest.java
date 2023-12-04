@@ -2,7 +2,7 @@ package com.orrganista.githubgrabber.mapper;
 
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import util.GithubApiUtil;
+import util.TestDataFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,7 +13,7 @@ public class GithubApiMapperTest {
 
     @Test
     public void toRepositoryResponseDto_DataCorrect_DtoReturned() {
-        var repository = GithubApiUtil.getTestRepository();
+        var repository = TestDataFactory.getTestRepository();
 
         var dto = githubApiMapper.toRepositoryResponseDto(repository);
 
@@ -27,7 +27,7 @@ public class GithubApiMapperTest {
 
     @Test
     public void toRepositoryResponseDtoList_DataCorrect_DtoListReturned() {
-        var repositoryList = GithubApiUtil.getTestRepositoryList();
+        var repositoryList = TestDataFactory.getTestRepositoryList();
 
         var dtoList = githubApiMapper.toRepositoryResponseDtoList(repositoryList);
 

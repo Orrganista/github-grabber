@@ -5,7 +5,7 @@ import com.orrganista.githubgrabber.remote.githubapi.model.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class GithubApiUtil {
+public class TestDataFactory {
 
     public static Repository getTestRepository() {
         return Repository.builder()

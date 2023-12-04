@@ -33,7 +33,7 @@ public class GithubApiController {
             @ApiResponse(responseCode = "404", description = "Data not found.", content = @Content)}
     )
     @GetMapping("/{owner}")
-    public List<RepositoryResponseDto> getUserRepositories(@Parameter(description = "name of user") @PathVariable String owner) {
+    public List<RepositoryResponseDto> getUserRepositories(@Parameter(description = "name of repository owner") @PathVariable String owner) {
         return githubApiService.getUserRepositories(owner);
     }
 
