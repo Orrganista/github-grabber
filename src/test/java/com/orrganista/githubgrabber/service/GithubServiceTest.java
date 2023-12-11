@@ -1,8 +1,8 @@
 package com.orrganista.githubgrabber.service;
 
 import com.orrganista.githubgrabber.exception.DataNotFoundException;
-import com.orrganista.githubgrabber.mapper.GithubApiMapper;
-import com.orrganista.githubgrabber.remote.githubapi.GithubApiClient;
+import com.orrganista.githubgrabber.mapper.GithubRepositoryMapper;
+import com.orrganista.githubgrabber.remote.github.GithubClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,29 +20,29 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-public class GithubApiServiceTest {
+public class GithubServiceTest {
 
-    private GithubApiClient githubApiClient;
-    private GithubApiService githubApiService;
-    private GithubApiMapper githubApiMapper;
+    private GithubClient githubClient;
+    private GithubService githubService;
+    private GithubRepositoryMapper githubRepositoryMapper;
+
 
     @BeforeEach
     public void setup() {
-        githubApiClient = Mockito.mock(GithubApiClient.class);
-        githubApiMapper = Mappers.getMapper(GithubApiMapper.class);
-        githubApiService = new GithubApiService(githubApiClient, githubApiMapper);
+        githubClient = Mockito.mock(GithubClient.class);
+        githubRepositoryMapper = Mappers.getMapper(GithubRepositoryMapper.class);
+        githubService = new GithubService(githubClient, githubRepositoryMapper);
     }
 
     @Test
     void getUserRepositories_RepositoriesExist_RepositoriesReturned() {
         // given
-        var repositoryList = TestDataFactory.getTestRepositoryList();
-        var repositoryResponseDtoList = githubApiMapper.toRepositoryResponseDtoList(repositoryList);
-        when(githubApiClient.getUserRepositories("owner")).thenReturn(repositoryList);
+        var repositories = TestDataFactory.getTestGithubRepositories();
+        var repositoryResponseDtoList = githubRepositoryMapper.toRepositoryResponseDtoList(repositories);
+        when(githubClient.getUserRepositories("owner")).thenReturn(repositories);
 
         // when
-        var result = githubApiService.getUserRepositories("owner");
+        var result = githubService.getUserRepositories("owner");
 
         // then
         assertNotNull(result);
@@ -56,11 +56,11 @@ public class GithubApiServiceTest {
 
     @Test
     void getUserRepositoryByName_RepositoryExist_RepositoryReturned() {
-        var repository = TestDataFactory.getTestRepository();
-        var repositoryResponseDto = githubApiMapper.toRepositoryResponseDto(repository);
-        when(githubApiClient.getUserRepositoryByName("owner", repository.getFullName())).thenReturn(Optional.of(repository));
+        var repository = TestDataFactory.getTestGithubRepository();
+        var repositoryResponseDto = githubRepositoryMapper.toRepositoryResponseDto(repository);
+        when(githubClient.getUserRepositoryByName("owner", repository.getFullName())).thenReturn(Optional.of(repository));
 
-        var result = githubApiService.getUserRepositoryByName("owner", repository.getFullName());
+        var result = githubService.getUserRepositoryByName("owner", repository.getFullName());
 
         assertNotNull(result);
         assertEquals(repositoryResponseDto.getFullName(), result.getFullName());
@@ -72,14 +72,14 @@ public class GithubApiServiceTest {
 
     @Test
     void getUserRepositoryByName_RepositoryDoesNotExist_ExceptionThrown() {
-        when(githubApiClient.getUserRepositoryByName(anyString(), anyString())).thenReturn(Optional.empty());
+        when(githubClient.getUserRepositoryByName(anyString(), anyString())).thenReturn(Optional.empty());
 
         DataNotFoundException exception = Assertions.assertThrows(
                 DataNotFoundException.class,
-                () -> githubApiService.getUserRepositoryByName("owner", "repoName")
+                () -> githubService.getUserRepositoryByName("owner", "repo")
         );
 
-        Assertions.assertEquals("Repository not found with name: repoName.", exception.getMessage());
+        Assertions.assertEquals("Repository not found with name: repo.", exception.getMessage());
         Assertions.assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
     }
 }

@@ -7,13 +7,13 @@ import util.TestDataFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class GithubApiMapperTest {
+public class GithubRepositoryMapperTest {
 
-    private final GithubApiMapper githubApiMapper = Mappers.getMapper(GithubApiMapper.class);
+    private final GithubRepositoryMapper githubApiMapper = Mappers.getMapper(GithubRepositoryMapper.class);
 
     @Test
     public void toRepositoryResponseDto_DataCorrect_DtoReturned() {
-        var repository = TestDataFactory.getTestRepository();
+        var repository = TestDataFactory.getTestGithubRepository();
 
         var dto = githubApiMapper.toRepositoryResponseDto(repository);
 
@@ -27,7 +27,7 @@ public class GithubApiMapperTest {
 
     @Test
     public void toRepositoryResponseDtoList_DataCorrect_DtoListReturned() {
-        var repositoryList = TestDataFactory.getTestRepositoryList();
+        var repositoryList = TestDataFactory.getTestGithubRepositories();
 
         var dtoList = githubApiMapper.toRepositoryResponseDtoList(repositoryList);
 

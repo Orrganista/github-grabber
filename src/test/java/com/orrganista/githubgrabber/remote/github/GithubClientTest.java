@@ -1,14 +1,19 @@
-package com.orrganista.githubgrabber.remote.githubapi;
+package com.orrganista.githubgrabber.remote.github;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.orrganista.githubgrabber.remote.github.model.GithubRepository;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import util.FileUtil;
 import util.TestDataFactory;
+
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
@@ -16,34 +21,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureWireMock(port = 8888)
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class GithubApiClientTest {
+public final class GithubClientTest {
 
     @Autowired
     WireMockServer wireMockServer;
 
     @Autowired
-    GithubApiClient githubApiClient;
+    GithubClient githubClient;
 
     @Autowired
     ObjectMapper objectMapper;
 
     @Test
     public void shouldReturnUserRepositories() throws Exception {
-        var repositoryList = TestDataFactory.getTestRepositoryList();
+        var repositoriesJson = FileUtil.readFromFileToString("/files/github/response_user_repositories.json");
+        var repositories = objectMapper.readValue(repositoriesJson, new TypeReference<List<GithubRepository>>() {
+        });
         wireMockServer.stubFor(get(urlEqualTo("/users/owner/repos"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody(objectMapper.writeValueAsString(repositoryList))));
+                        .withBody(repositoriesJson)));
 
-        var responseRepositoryList = githubApiClient.getUserRepositories("owner");
+        var responseRepositories = githubClient.getUserRepositories("owner");
 
         verify(getRequestedFor(urlEqualTo("/users/owner/repos")));
-        assertEquals(repositoryList.size(), responseRepositoryList.size());
-        for (int i = 0; i < repositoryList.size(); i++) {
-            var repository = repositoryList.get(i);
-            var responseRepository = responseRepositoryList.get(i);
+        assertEquals(repositories.size(), responseRepositories.size());
+        for (int i = 0; i < repositories.size(); i++) {
+            var repository = repositories.get(i);
+            var responseRepository = responseRepositories.get(i);
             assertEquals(repository.getFullName(), responseRepository.getFullName());
             assertEquals(repository.getDescription(), responseRepository.getDescription());
             assertEquals(repository.getCloneUrl(), responseRepository.getCloneUrl());
@@ -54,13 +60,14 @@ public final class GithubApiClientTest {
 
     @Test
     public void shouldReturnUserRepositoryByName() throws Exception {
-        var repository = TestDataFactory.getTestRepository();
+        var repositoryJson = FileUtil.readFromFileToString("/files/github/response_user_repository.json");
+        var repository = objectMapper.readValue(repositoryJson, GithubRepository.class);
         wireMockServer.stubFor(get(urlEqualTo("/repos/owner/repo"))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody(objectMapper.writeValueAsString(repository))));
+                        .withBody(repositoryJson)));
 
-        var responseRepository = githubApiClient.getUserRepositoryByName("owner", "repo").get();
+        var responseRepository = githubClient.getUserRepositoryByName("owner", "repo").get();
 
         verify(getRequestedFor(urlEqualTo("/repos/owner/repo")));
         assertEquals(repository.getFullName(), responseRepository.getFullName());

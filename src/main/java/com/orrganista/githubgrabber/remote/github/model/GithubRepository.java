@@ -1,15 +1,14 @@
-package com.orrganista.githubgrabber.remote.githubapi.model;
+package com.orrganista.githubgrabber.remote.github.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Data
 @Builder
-public class Repository {
+public class GithubRepository {
 
     @JsonProperty("full_name")
     private final String fullName;
@@ -20,5 +19,5 @@ public class Repository {
     @JsonProperty("stargazers_count")
     private final Integer stargazersCount;
     @JsonProperty("created_at")
-    private final LocalDateTime createdAt;
+    private final OffsetDateTime createdAt;
 }

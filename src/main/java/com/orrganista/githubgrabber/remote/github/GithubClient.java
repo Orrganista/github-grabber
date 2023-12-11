@@ -1,7 +1,7 @@
-package com.orrganista.githubgrabber.remote.githubapi;
+package com.orrganista.githubgrabber.remote.github;
 
 import com.orrganista.githubgrabber.remote.FeignConfig;
-import com.orrganista.githubgrabber.remote.githubapi.model.Repository;
+import com.orrganista.githubgrabber.remote.github.model.GithubRepository;
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Optional;
 
 @FeignClient(value = "githubApi", configuration = FeignConfig.class)
-public interface GithubApiClient {
+public interface GithubClient {
 
     @GetMapping("/users/{owner}/repos")
     @Headers("Accept: application/vnd.github+json")
-    List<Repository> getUserRepositories(@PathVariable("owner") String owner);
+    List<GithubRepository> getUserRepositories(@PathVariable("owner") String owner);
 
     @GetMapping("/repos/{owner}/{repo}")
     @Headers("Accept: application/vnd.github+json")
-    Optional<Repository> getUserRepositoryByName(@PathVariable("owner") String owner, @PathVariable("repo") String repo);
+    Optional<GithubRepository> getUserRepositoryByName(@PathVariable("owner") String owner, @PathVariable("repo") String repo);
 }
