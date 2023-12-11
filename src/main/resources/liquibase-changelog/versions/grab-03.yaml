@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Dominik
+      changes:
+        - createTable:
+            tableName: repository
+            columns:
+              - column:
+                  name: owner_name
+                  type: varchar(39)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_repository_id
+              - column:
+                  name: repository_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_repository_id
+              - column:
+                  name: description
+                  type: varchar(100)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: clone_url
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stars
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
